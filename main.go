@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	f, err := os.Open("/home/fabio/.config/repo/repos")
+	f, err := os.Open("/home/fabio/.config/repos/repos")
 	if err != nil {
 		panic(err)
 	}
