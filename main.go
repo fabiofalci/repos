@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"os/exec"
-	"bytes"
-	"strings"
-	"strconv"
-	"os"
 	"bufio"
+	"bytes"
+	"fmt"
+	"os"
+	"os/exec"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 }
 
 func repoName(repo string) string {
-	return repo[strings.LastIndex(repo, "/") +1:]
+	return repo[strings.LastIndex(repo, "/")+1:]
 }
 
 func branch(repo string) string {
@@ -67,7 +67,7 @@ func status(repo string) string {
 	if strings.Contains(output, "have diverged") {
 		return "DIVER"
 	} else if strings.Contains(output, "branch is ahead") {
-		return "HEAD"
+		return "AHEAD"
 	} else if strings.Contains(output, "branch is behind") {
 		return "BEHIN"
 	} else if strings.Contains(output, "nothing added to commit but untracked files present") {
@@ -100,5 +100,3 @@ func run(folder string, command []string) (string, error) {
 	}
 	return out.String(), nil
 }
-
-
