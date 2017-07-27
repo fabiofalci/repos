@@ -41,6 +41,7 @@ func main() {
 	}
 	longestName = longestName + 1
 
+	fmt.Printf("%"+strconv.Itoa(longestName)+"s Remot Local [branch]\n", "")
 	for _, repo := range repos {
 		//fetch(repo)
 		repoName := repoName(repo)
