@@ -33,12 +33,17 @@ func main() {
 	longestName = longestName + 1
 
 	for _, repo := range repos {
+		//fetch(repo)
 		repoName := repoName(repo)
 		st := status(repo)
 		br := branch(repo)
 
 		fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s]\n", repoName, st, br)
 	}
+}
+
+func fetch(repo string) {
+	run(repo, []string{"fetch", "--all"})
 }
 
 func repoName(repo string) string {
@@ -64,24 +69,29 @@ func status(repo string) string {
 		return "not a repo"
 	}
 
+	return remoteStatus(output) + " " + localStatus(output)
+}
+
+func localStatus(output string) string {
+	if strings.Contains(output, "nothing added to commit but untracked files present") {
+		return "UNTRA"
+	} else if strings.Contains(output, "nothing to commit") {
+		return "-----"
+	}
+
+	return "CHANG"
+}
+func remoteStatus(output string) string {
 	if strings.Contains(output, "have diverged") {
 		return "DIVER"
 	} else if strings.Contains(output, "branch is ahead") {
 		return "AHEAD"
 	} else if strings.Contains(output, "branch is behind") {
 		return "BEHIN"
-	} else if strings.Contains(output, "nothing added to commit but untracked files present") {
-		return "DIRTY"
-	} else if strings.Contains(output, "nothing to commit") {
-		if strings.Contains(output, "is up-to-date with") {
-			return "-----"
-		}
-		return "NO-RE"
-	} else {
-		return "CHANG"
+	} else if strings.Contains(output, "branch is up-to-date") {
+		return "-----"
 	}
-
-	return "?"
+	return "NO-RE"
 }
 
 func run(folder string, command []string) (string, error) {
