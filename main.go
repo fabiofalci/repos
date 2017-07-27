@@ -8,12 +8,21 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"os/user"
+	"log"
 )
 
 func main() {
-	f, err := os.Open("/home/fabio/.config/repos/repos")
+	usr, err := user.Current()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+		return
+	}
+
+	f, err := os.Open(usr.HomeDir + "/.config/repos/repos")
+	if err != nil {
+		log.Fatal("Cannot open '~/.config/repos/repos'. Have you created a repos configuration file?")
+		return
 	}
 	defer f.Close()
 
