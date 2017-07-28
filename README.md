@@ -48,3 +48,13 @@ Remote status can be: `AHEAD`, `BEHIND`, `NO-REMOTE` and `----` for in sync with
 
 Local status can be: `CHANGES`, `UNTRACKED` and `----` for no changes.
 
+How to build
+------------
+
+Clone the repository, install `go` and
+
+```
+$ make build
+```
+
+Binary will be generated in the folder `bundles`.
