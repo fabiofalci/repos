@@ -70,9 +70,12 @@ func show(fetchRepo bool) {
 		}
 		repoName := repoName(repo)
 		st := status(repo)
-		br := branch(repo)
-
-		fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s]\n", repoName, st, br)
+		if st != "error" {
+			br := branch(repo)
+			fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s]\n", repoName, st, br)
+		} else {
+			fmt.Printf("%"+strconv.Itoa(longestName)+"s error\n", repoName)
+		}
 	}
 }
 
@@ -94,15 +97,9 @@ func branch(repo string) string {
 
 func status(repo string) string {
 	output, err := run(repo, []string{"status", "-unormal"})
-	if err != nil {
-		fmt.Println(err)
+	if err != nil || strings.Contains(output, "Not a git repo") {
+		return "error"
 	}
-
-	if strings.Contains(output, "Not a git repo") {
-		fmt.Println("Not a git repo")
-		return "not a repo"
-	}
-
 	return remoteStatus(output) + " " + localStatus(output)
 }
 
