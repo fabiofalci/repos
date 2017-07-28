@@ -12,10 +12,27 @@ import (
 	"log"
 
 	"github.com/urfave/cli"
+	"time"
+	"runtime"
 )
+
+var version string
+var commit string
+var buildDate string
 
 func main() {
 	app := cli.NewApp()
+	app.Name = "repos"
+	app.Version = version
+	cli.VersionPrinter = func(c *cli.Context) {
+		fmt.Println("Version: " + c.App.Version)
+		fmt.Println("Git commit: " + commit)
+		if i, err := strconv.ParseInt(buildDate, 10, 64); err == nil {
+			fmt.Println("Build date: " + time.Unix(i, 0).UTC().String())
+		}
+		fmt.Println("Go version: " + runtime.Version())
+	}
+
 	var fetch bool = false
 	var branches bool = false
 
