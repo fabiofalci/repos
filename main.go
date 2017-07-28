@@ -17,6 +17,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	var fetch bool = false
+	var branches bool = false
 
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
@@ -24,17 +25,22 @@ func main() {
 			Usage:       "Execute git fetch --all",
 			Destination: &fetch,
 		},
+		cli.BoolFlag{
+			Name:        "branches, b",
+			Usage:       "Show all branches",
+			Destination: &branches,
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
-		show(fetch)
+		show(fetch, branches)
 		return nil
 	}
 
 	app.Run(os.Args)
 }
 
-func show(fetchRepo bool) {
+func show(fetchRepo bool, showBranches bool) {
 	usr, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
@@ -72,7 +78,12 @@ func show(fetchRepo bool) {
 		st := status(repo)
 		if st != "error" {
 			br := branch(repo)
-			fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s]\n", repoName, st, br)
+			if showBranches {
+				brs := branches(repo, br)
+				fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s] %s\n", repoName, st, br, brs)
+			} else {
+				fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s]\n", repoName, st, br)
+			}
 		} else {
 			fmt.Printf("%"+strconv.Itoa(longestName)+"s error\n", repoName)
 		}
@@ -93,6 +104,18 @@ func branch(repo string) string {
 		fmt.Println(err)
 	}
 	return strings.TrimSuffix(output, "\n")
+}
+
+func branches(repo string, currentBranch string) string {
+	output, err := run(repo, []string{"branch", "--column", "--format=%(refname:short)~"})
+	if err != nil {
+		fmt.Println(err)
+	}
+	output = strings.Replace(output, "\n", "", -1)
+	output = strings.Replace(output, currentBranch+"~", "", -1)
+	output = strings.Replace(output, " ", "", -1)
+	output = strings.Replace(output, "~", " ", -1)
+	return output
 }
 
 func status(repo string) string {
