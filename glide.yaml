@@ -1,0 +1,3 @@
+package: github.com/fabiofalci/repos
+import:
+- package: github.com/urfave/cli
