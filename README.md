@@ -1,7 +1,7 @@
 repos
 -----
 
-A simple cmd to show statuses of multiple git repositories.
+A simple cmd to show status of multiple git repositories.
 
 
 * Create configuration listing your git repositories:

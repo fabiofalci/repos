@@ -10,9 +10,31 @@ import (
 	"strings"
 	"os/user"
 	"log"
+
+	"github.com/urfave/cli"
 )
 
 func main() {
+	app := cli.NewApp()
+	var fetch bool = false
+
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:        "fetch, f",
+			Usage:       "Execute git fetch --all",
+			Destination: &fetch,
+		},
+	}
+
+	app.Action = func(c *cli.Context) error {
+		show(fetch)
+		return nil
+	}
+
+	app.Run(os.Args)
+}
+
+func show(fetchRepo bool) {
 	usr, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
@@ -43,7 +65,9 @@ func main() {
 
 	fmt.Printf("%"+strconv.Itoa(longestName)+"s Remot Local [branch]\n", "")
 	for _, repo := range repos {
-		//fetch(repo)
+		if fetchRepo {
+			fetch(repo)
+		}
 		repoName := repoName(repo)
 		st := status(repo)
 		br := branch(repo)
