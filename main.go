@@ -79,15 +79,20 @@ func show(fetchRepo bool, showBranches bool) {
 
 	longestName := 0
 	for _, repo := range repos {
-		len := len(repoName(repo))
-		if len > longestName {
-			longestName = len
+		if len(repo) > 0 && string(repo[0]) != "#" {
+			len := len(repoName(repo))
+			if len > longestName {
+				longestName = len
+			}
 		}
 	}
 	longestName = longestName + 1
 
 	fmt.Printf("%"+strconv.Itoa(longestName)+"s Remot Local [branch]\n", "")
 	for _, repo := range repos {
+		if len(repo) == 0 || string(repo[0]) == "#" {
+			continue
+		}
 		if fetchRepo {
 			fetch(repo)
 		}
