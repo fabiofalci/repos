@@ -76,6 +76,14 @@ func show(fetchRepo bool, showBranches bool) {
 		repos = append(repos, scanner.Text())
 	}
 
+	profiles := getProfiles(repos)
+
+	for name, r := range profiles {
+		showProfile(name, r, fetchRepo, showBranches)
+	}
+}
+
+func showProfile(name string, repos []string, fetchRepo bool, showBranches bool) {
 	longestName := 0
 	for _, repo := range repos {
 		if len(repo) > 0 && string(repo[0]) != "#" {
@@ -87,6 +95,9 @@ func show(fetchRepo bool, showBranches bool) {
 	}
 	longestName = longestName + 1
 
+	if name != "__default__" {
+		fmt.Printf("%v\n", name)
+	}
 	fmt.Printf("%"+strconv.Itoa(longestName)+"s Remot Local [branch]\n", "")
 	for _, repo := range repos {
 		if len(repo) == 0 || string(repo[0]) == "#" {
@@ -109,6 +120,30 @@ func show(fetchRepo bool, showBranches bool) {
 			fmt.Printf("%"+strconv.Itoa(longestName)+"s error\n", repoName)
 		}
 	}
+}
+
+func getProfiles(repos []string) map[string][]string {
+	profiles := make(map[string][]string)
+
+	var current string
+	if string(repos[0][0]) != "#" {
+		current = "__default__"
+		profiles[current] = make([]string, 0)
+	}
+
+	for _, repo := range repos {
+		if len(repo) == 0 {
+			continue
+		}
+
+		if string(repo[0]) == "#" {
+			current = repo[1:]
+			profiles[current] = make([]string, 0)
+		}
+		profiles[current] = append(profiles[current], repo)
+	}
+
+	return profiles
 }
 
 func fetch(repo string) {
