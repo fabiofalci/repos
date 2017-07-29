@@ -4,16 +4,15 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"github.com/urfave/cli"
+	"log"
 	"os"
 	"os/exec"
+	"os/user"
+	"runtime"
 	"strconv"
 	"strings"
-	"os/user"
-	"log"
-
-	"github.com/urfave/cli"
 	"time"
-	"runtime"
 )
 
 var version string
