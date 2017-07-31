@@ -19,6 +19,16 @@ var version string
 var commit string
 var buildDate string
 
+const (
+	UNTRACKED = "UNTRA"
+	SYNC = "-----"
+	CHANGED = "CHANG"
+	DIVERGED = "DIVER"
+	AHEAD = "AHEAD"
+	BEHIND = "BEHIN"
+	NO_REMOTE = "NO-RE"
+)
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "repos"
@@ -184,24 +194,24 @@ func status(repo string) string {
 
 func localStatus(output string) string {
 	if strings.Contains(output, "nothing added to commit but untracked files present") {
-		return "UNTRA"
+		return UNTRACKED
 	} else if strings.Contains(output, "nothing to commit") {
-		return "-----"
+		return SYNC
 	}
 
-	return "CHANG"
+	return CHANGED
 }
 func remoteStatus(output string) string {
 	if strings.Contains(output, "have diverged") {
-		return "DIVER"
+		return DIVERGED
 	} else if strings.Contains(output, "branch is ahead") {
-		return "AHEAD"
+		return AHEAD
 	} else if strings.Contains(output, "branch is behind") {
-		return "BEHIN"
+		return BEHIND
 	} else if strings.Contains(output, "branch is up-to-date") {
-		return "-----"
+		return SYNC
 	}
-	return "NO-RE"
+	return NO_REMOTE
 }
 
 func run(folder string, command []string) (string, error) {
