@@ -214,9 +214,5 @@ func run(folder string, command []string) (string, error) {
 	if err := cmd.Run(); err != nil {
 		return "", err
 	}
-	if stderr.Len() > 0 {
-		fmt.Println("#### Stderr ####")
-		fmt.Println(stderr.String())
-	}
 	return out.String(), nil
 }
