@@ -1,11 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/urfave/cli"
 	"os"
-	"os/exec"
 	"runtime"
 	"strconv"
 	"time"
@@ -17,11 +15,11 @@ var buildDate string
 
 const (
 	UNTRACKED = "UNTRA"
-	SYNC = "-----"
-	CHANGED = "CHANG"
-	DIVERGED = "DIVER"
-	AHEAD = "AHEAD"
-	BEHIND = "BEHIN"
+	SYNC      = "-----"
+	CHANGED   = "CHANG"
+	DIVERGED  = "DIVER"
+	AHEAD     = "AHEAD"
+	BEHIND    = "BEHIN"
 	NO_REMOTE = "NO-RE"
 )
 
@@ -64,20 +62,21 @@ func main() {
 
 func show(fetchRepo bool, showBranches bool) {
 	conf := NewConfiguration()
+	git := NewGit()
 
 	longestName := conf.GetLongestName()
 
 	fmt.Printf("%"+strconv.Itoa(longestName)+"s Remot Local [branch]\n", "")
 	for _, repo := range conf.Repos {
 		if fetchRepo {
-			repo.Fetch()
+			git.Fetch(repo)
 		}
 		repoName := repo.Name()
-		st := repo.Status()
+		st := git.Status(repo)
 		if st != "error" {
-			br := repo.Branch()
+			br := git.Branch(repo)
 			if showBranches {
-				brs := repo.Branches(br)
+				brs := git.Branches(repo, br)
 				fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s] %s\n", repoName, st, br, brs)
 			} else {
 				fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s]\n", repoName, st, br)
@@ -86,17 +85,4 @@ func show(fetchRepo bool, showBranches bool) {
 			fmt.Printf("%"+strconv.Itoa(longestName)+"s error\n", repoName)
 		}
 	}
-}
-
-func run(folder string, command []string) (string, error) {
-	cmd := exec.Command("git", command...)
-	cmd.Dir = folder
-	var out bytes.Buffer
-	var stderr bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &stderr
-	if err := cmd.Run(); err != nil {
-		return "", err
-	}
-	return out.String(), nil
 }

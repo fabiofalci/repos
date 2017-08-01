@@ -1,19 +1,18 @@
 package main
 
 import (
-	"os/exec"
 	"bytes"
+	"os/exec"
 )
 
-type Runner interface {
-	Run(folder string, command string, args []string) error
+type CommandLineRunner interface {
+	Run(folder string, command string, args []string) (string, error)
 }
 
-type DefaultRunner struct {
+type DefaultCommandLineRunner struct {
 }
 
-
-func (runner *DefaultRunner) Run(folder string, command string, args []string) (string, error) {
+func (runner *DefaultCommandLineRunner) Run(folder string, command string, args []string) (string, error) {
 	cmd := exec.Command(command, args...)
 	cmd.Dir = folder
 	var out bytes.Buffer
@@ -25,4 +24,3 @@ func (runner *DefaultRunner) Run(folder string, command string, args []string) (
 	}
 	return out.String(), nil
 }
-

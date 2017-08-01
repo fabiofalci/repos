@@ -1,9 +1,9 @@
 package main
 
 import (
-	"os"
-	"log"
 	"bufio"
+	"log"
+	"os"
 	"os/user"
 )
 
