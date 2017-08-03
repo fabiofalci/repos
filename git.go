@@ -31,6 +31,12 @@ func (git *CommandLineGit) Fetch(repo *Repo) {
 }
 
 func (git *CommandLineGit) Status(repo *Repo) string {
+	w, _ := repo.Repository.Worktree()
+	s, _ := w.Status()
+	if s.IsClean() {
+		return "+++++ ++++++"
+	}
+
 	output, err := git.runner.Run(repo.Path, "git", []string{"status", "-unormal"})
 	if err != nil || strings.Contains(output, "Not a git repo") {
 		return "error"

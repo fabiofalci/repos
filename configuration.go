@@ -35,7 +35,7 @@ func (conf *Configuration) readFile() {
 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		conf.Repos = append(conf.Repos, &Repo{Path: scanner.Text()})
+		conf.Repos = append(conf.Repos, NewRepo(scanner.Text()))
 	}
 }
 

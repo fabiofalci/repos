@@ -1,6 +1,79 @@
-hash: e151abb576b55dff1dd53d7e02484e72e9faba86ce0613edb4827ef2a41a1f3f
-updated: 2017-07-29T00:44:29.0615078+01:00
+hash: 460755a943ff2a7d7383403198638944aecbdf74783b55456990e00fa58480fb
+updated: 2017-08-03T17:35:52.354411997+01:00
 imports:
+- name: github.com/sergi/go-diff
+  version: feef008d51ad2b3778f85d387ccf91735543008d
+  subpackages:
+  - diffmatchpatch
+- name: github.com/src-d/gcfg
+  version: f187355171c936ac84a82793659ebb4936bc1c23
+  subpackages:
+  - scanner
+  - token
+  - types
 - name: github.com/urfave/cli
   version: 4b90d79a682b4bf685762c7452db20f2a676ecb2
-devImports: []
+- name: github.com/xanzy/ssh-agent
+  version: ba9c9e33906f58169366275e3450db66139a31a9
+- name: golang.org/x/crypto
+  version: 358f15eacb587b056fc93273b930314a5cda12fe
+  subpackages:
+  - curve25519
+  - ed25519
+  - ed25519/internal/edwards25519
+  - ssh
+  - ssh/agent
+  - ssh/knownhosts
+- name: gopkg.in/src-d/go-billy.v3
+  version: c329b7bc7b9d24905d2bc1b85bfa29f7ae266314
+  subpackages:
+  - helper/chroot
+  - helper/polyfill
+  - osfs
+  - util
+- name: gopkg.in/src-d/go-git.v4
+  version: c17627c5ee10ed6e9ef92dafb8d5b46160484e0d
+  subpackages:
+  - '...'
+  - config
+  - internal/revision
+  - plumbing
+  - plumbing/cache
+  - plumbing/filemode
+  - plumbing/format/config
+  - plumbing/format/diff
+  - plumbing/format/gitignore
+  - plumbing/format/idxfile
+  - plumbing/format/index
+  - plumbing/format/objfile
+  - plumbing/format/packfile
+  - plumbing/format/pktline
+  - plumbing/object
+  - plumbing/protocol/packp
+  - plumbing/protocol/packp/capability
+  - plumbing/protocol/packp/sideband
+  - plumbing/revlist
+  - plumbing/storer
+  - plumbing/transport
+  - plumbing/transport/client
+  - plumbing/transport/file
+  - plumbing/transport/git
+  - plumbing/transport/http
+  - plumbing/transport/internal/common
+  - plumbing/transport/server
+  - plumbing/transport/ssh
+  - storage
+  - storage/filesystem
+  - storage/filesystem/internal/dotgit
+  - storage/memory
+  - utils/binary
+  - utils/diff
+  - utils/ioutil
+  - utils/merkletrie
+  - utils/merkletrie/filesystem
+  - utils/merkletrie/index
+  - utils/merkletrie/internal/frame
+  - utils/merkletrie/noder
+- name: gopkg.in/warnings.v0
+  version: 8a331561fe74dadba6edfc59f3be66c22c3b065d
+testImports: []
