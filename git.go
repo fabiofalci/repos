@@ -19,9 +19,13 @@ type CommandLineGit struct {
 	runner CommandLineRunner
 }
 
-func NewGit() Git {
+func NewDefaultGit() Git {
+	return NewCustomGit(&DefaultCommandLineRunner{})
+}
+
+func NewCustomGit(runner CommandLineRunner) Git {
 	git := &CommandLineGit{
-		runner: &DefaultCommandLineRunner{},
+		runner: runner,
 	}
 	return git
 }

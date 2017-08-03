@@ -62,7 +62,7 @@ func main() {
 
 func show(fetchRepo bool, showBranches bool) {
 	conf := NewConfiguration()
-	git := NewGit()
+	git := NewDefaultGit()
 
 	longestName := conf.GetLongestName()
 
