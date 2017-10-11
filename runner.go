@@ -14,7 +14,9 @@ type DefaultCommandLineRunner struct {
 
 func (runner *DefaultCommandLineRunner) Run(folder string, command string, args []string) (string, error) {
 	cmd := exec.Command(command, args...)
-	cmd.Dir = folder
+	if folder != "" {
+		cmd.Dir = folder
+	}
 	var out bytes.Buffer
 	var stderr bytes.Buffer
 	cmd.Stdout = &out

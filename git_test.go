@@ -33,6 +33,10 @@ func TestFetch(t *testing.T) {
 	}
 }
 
+func TestClone(t *testing.T) {
+	// TODO
+}
+
 func TestStatus(t *testing.T) {
 	mockRunner := NewMockRunner("")
 	git := NewCustomGit(mockRunner)

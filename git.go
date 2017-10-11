@@ -6,6 +6,8 @@ import (
 )
 
 type Git interface {
+	Clone(repo *Repo) string
+
 	Fetch(repo *Repo)
 
 	Status(repo *Repo) string
@@ -28,6 +30,14 @@ func NewCustomGit(runner CommandLineRunner) Git {
 		runner: runner,
 	}
 	return git
+}
+
+func (git *CommandLineGit) Clone(repo *Repo) string {
+	output, err := git.runner.Run("", "git", []string{"clone", repo.RepoUrl, repo.Path})
+	if err != nil || strings.Contains(output, "Not a git repo") {
+		return "error"
+	}
+	return "ok"
 }
 
 func (git *CommandLineGit) Fetch(repo *Repo) {

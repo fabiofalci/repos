@@ -6,6 +6,7 @@ import (
 
 type Repo struct {
 	Path         string
+	RepoUrl      string
 	RemoteStatus string
 	LocalStatus  string
 }

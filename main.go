@@ -37,9 +37,15 @@ func main() {
 	}
 
 	var fetch bool = false
+	var clone bool = false
 	var branches bool = false
 
 	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:        "clone, c",
+			Usage:       "Execute git clone <url> <dir>",
+			Destination: &clone,
+		},
 		cli.BoolFlag{
 			Name:        "fetch, f",
 			Usage:       "Execute git fetch --all",
@@ -53,14 +59,35 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) error {
-		show(fetch, branches)
+		if clone {
+			cloneRepos()
+		} else {
+			showRepos(fetch, branches)
+		}
 		return nil
 	}
 
 	app.Run(os.Args)
 }
 
-func show(fetchRepo bool, showBranches bool) {
+func cloneRepos() {
+	conf := NewConfiguration()
+	git := NewDefaultGit()
+
+	longestName := conf.GetLongestName()
+
+	fmt.Printf("Cloning repos...\n")
+	for _, repo := range conf.Repos {
+		repoName := repo.Name()
+		cloned := git.Clone(repo)
+		if cloned != "error" {
+			fmt.Printf("%"+strconv.Itoa(longestName)+"s cloned\n", repoName)
+		}
+	}
+	fmt.Println("Done")
+}
+
+func showRepos(fetchRepo bool, showBranches bool) {
 	conf := NewConfiguration()
 	git := NewDefaultGit()
 

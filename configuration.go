@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"strings"
 )
 
 type Configuration struct {
@@ -35,7 +36,16 @@ func (conf *Configuration) readFile() {
 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		conf.Repos = append(conf.Repos, &Repo{Path: scanner.Text()})
+		line := strings.TrimSpace(scanner.Text())
+		if strings.Contains(line, " ") {
+			words := strings.Fields(line)
+			conf.Repos = append(conf.Repos, &Repo{
+				Path: words[0],
+				RepoUrl: words[1],
+			})
+		} else {
+			conf.Repos = append(conf.Repos, &Repo{Path: line})
+		}
 	}
 }
 
@@ -43,9 +53,9 @@ func (conf *Configuration) GetLongestName() int {
 	longestName := 0
 	for _, repo := range conf.Repos {
 		if len(repo.Path) > 0 && string(repo.Path[0]) != "#" {
-			len := len(repo.Name())
-			if len > longestName {
-				longestName = len
+			length := len(repo.Name())
+			if length > longestName {
+				longestName = length
 			}
 		}
 	}
