@@ -39,6 +39,7 @@ func main() {
 	var fetch bool = false
 	var clone bool = false
 	var branches bool = false
+	var profile string = ""
 
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
@@ -56,13 +57,18 @@ func main() {
 			Usage:       "Show all branches",
 			Destination: &branches,
 		},
+		cli.StringFlag{
+			Name:        "profile, p",
+			Usage:       "Show profile repos",
+			Destination: &profile,
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
 		if clone {
-			cloneRepos()
+			cloneRepos(profile)
 		} else {
-			showRepos(fetch, branches)
+			showRepos(profile, fetch, branches)
 		}
 		return nil
 	}
@@ -70,8 +76,8 @@ func main() {
 	app.Run(os.Args)
 }
 
-func cloneRepos() {
-	conf := NewConfiguration()
+func cloneRepos(profile string) {
+	conf := NewConfiguration(profile)
 	git := NewDefaultGit()
 
 	longestName := conf.GetLongestName()
@@ -87,8 +93,8 @@ func cloneRepos() {
 	fmt.Println("Done")
 }
 
-func showRepos(fetchRepo bool, showBranches bool) {
-	conf := NewConfiguration()
+func showRepos(profile string, fetchRepo bool, showBranches bool) {
+	conf := NewConfiguration(profile)
 	git := NewDefaultGit()
 
 	longestName := conf.GetLongestName()

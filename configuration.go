@@ -9,12 +9,14 @@ import (
 )
 
 type Configuration struct {
-	Repos []*Repo
+	Repos   []*Repo
+	profile string
 }
 
-func NewConfiguration() *Configuration {
+func NewConfiguration(profile string) *Configuration {
 	conf := &Configuration{
 		Repos: make([]*Repo, 0),
+		profile: profile,
 	}
 	conf.readFile()
 	return conf
@@ -27,9 +29,10 @@ func (conf *Configuration) readFile() {
 		return
 	}
 
-	f, err := os.Open(usr.HomeDir + "/.config/repos/repos")
+	configurationPath := conf.getProfileConfigurationPath()
+	f, err := os.Open(usr.HomeDir + configurationPath)
 	if err != nil {
-		log.Fatal("Cannot open '~/.config/repos/repos'. Have you created a repos configuration file?")
+		log.Fatalf("Cannot open '%v'. Have you created a repos configuration file?", configurationPath)
 		return
 	}
 	defer f.Close()
@@ -47,6 +50,13 @@ func (conf *Configuration) readFile() {
 			conf.Repos = append(conf.Repos, &Repo{Path: line})
 		}
 	}
+}
+
+func (conf *Configuration) getProfileConfigurationPath() string {
+	if conf.profile == "" {
+		return "/.config/repos/repos"
+	}
+	return "/.config/repos/repos." + conf.profile
 }
 
 func (conf *Configuration) GetLongestName() int {
