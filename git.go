@@ -88,7 +88,7 @@ func remoteStatus(output string) string {
 		return AHEAD
 	} else if strings.Contains(output, "branch is behind") {
 		return BEHIND
-	} else if strings.Contains(output, "branch is up-to-date") {
+	} else if strings.Contains(output, "branch is up to date") {
 		return SYNC
 	}
 	return NO_REMOTE
