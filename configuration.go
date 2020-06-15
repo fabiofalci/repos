@@ -40,6 +40,9 @@ func (conf *Configuration) readFile() {
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
 		if strings.Contains(line, " ") {
 			words := strings.Fields(line)
 			conf.Repos = append(conf.Repos, &Repo{
