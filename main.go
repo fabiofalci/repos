@@ -39,6 +39,7 @@ func main() {
 	var fetch bool = false
 	var clone bool = false
 	var branches bool = false
+	var hideUnchanged bool = false
 	var profile string = ""
 
 	app.Flags = []cli.Flag{
@@ -62,13 +63,18 @@ func main() {
 			Usage:       "Show profile repos",
 			Destination: &profile,
 		},
+		cli.BoolFlag{
+			Name:        "hide, hi",
+			Usage:       "Hide repos if on master/developer and unchanged",
+			Destination: &hideUnchanged,
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
 		if clone {
 			cloneRepos(profile)
 		} else {
-			showRepos(profile, fetch, branches)
+			showRepos(profile, fetch, branches, hideUnchanged)
 		}
 		return nil
 	}
@@ -93,7 +99,7 @@ func cloneRepos(profile string) {
 	fmt.Println("Done")
 }
 
-func showRepos(profile string, fetchRepo bool, showBranches bool) {
+func showRepos(profile string, fetchRepo bool, showBranches bool, hideUnchanged bool) {
 	conf := NewConfiguration(profile)
 	git := NewDefaultGit()
 
@@ -108,6 +114,9 @@ func showRepos(profile string, fetchRepo bool, showBranches bool) {
 		st := git.Status(repo)
 		if st != "error" {
 			br := git.Branch(repo)
+			if hideUnchanged && st == "----- -----" && (br == "develop" || br == "master") {
+				continue
+			}
 			if showBranches {
 				brs := git.Branches(repo, br)
 				fmt.Printf("%"+strconv.Itoa(longestName)+"s %s [%s] %s\n", repoName, st, br, brs)
