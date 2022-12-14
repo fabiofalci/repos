@@ -65,7 +65,7 @@ func main() {
 		},
 		cli.BoolFlag{
 			Name:        "hide, hi",
-			Usage:       "Hide repos if on master/developer and unchanged",
+			Usage:       "Hide repos if on master/develop/main and unchanged",
 			Destination: &hideUnchanged,
 		},
 	}
@@ -114,7 +114,7 @@ func showRepos(profile string, fetchRepo bool, showBranches bool, hideUnchanged 
 		st := git.Status(repo)
 		if st != "error" {
 			br := git.Branch(repo)
-			if hideUnchanged && st == "----- -----" && (br == "develop" || br == "master") {
+			if hideUnchanged && st == "----- -----" && (br == "develop" || br == "master" || br == "main") {
 				continue
 			}
 			if showBranches {
